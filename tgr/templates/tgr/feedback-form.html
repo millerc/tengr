@@ -1,0 +1,32 @@
+        <form action="{% url 'feedback' region=community.region.slug slug=community.slug %}" method="POST" id="feedbackform" data-abide>
+          {% csrf_token %}
+          <div class="row">
+            <div class="large-6 columns">
+              <label for="id_name">Your name <small>(Required)</small></label>
+              <input id="id_name" maxlength="128" name="name" type="text" required>
+              <small class="error">Name is required.</small>
+            </div>
+            <div class="large-6 columns">
+              <label for="id_email">Your email <small>(Required)</small></label>
+              <input id="id_email" maxlength="75" name="email" type="email" required>
+              <small class="error">A valid email address is required.</small>
+            </div>
+          </div>
+          <div class="row">
+            <div class="large-12 columns">
+              <input id="id_notify" name="notify" type="checkbox">
+              <label for="id_notify">Notify me when <strong>10 Great Reasons: {{ community.name }}</strong> is published.</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="large-12 columns">
+              <label for="id_message">Your message <small>(Optional)</small></label>
+              <textarea cols="40" id="id_message" name="message" rows="8"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="large-12 columns">
+              <button type="submit" class="button">Send feedback</button>
+            </div>
+          </div>
+        </form>

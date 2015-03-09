@@ -1,0 +1,76 @@
+*** Starting uWSGI 2.0.6 (32bit) on [Sat Feb 28 07:13:41 2015] ***
+compiled with version: 4.7.2 on 13 August 2014 19:16:52
+os: Linux-3.2.0-4-686-pae #1 SMP Debian 3.2.65-1+deb7u1
+nodename: alt.cwc.me
+machine: i686
+clock source: unix
+detected number of CPU cores: 1
+current working directory: /var/www/vhosts/10.communitylink.com/tengr
+writing pidfile to /tmp/tengr-master.pid
+detected binary path: /var/www/vhosts/10.communitylink.com/.pyenv/versions/3.4.1/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir(): No such file or directory [core/uwsgi.c line 2525]
+*** Starting uWSGI 2.0.6 (32bit) on [Sat Feb 28 07:18:22 2015] ***
+compiled with version: 4.7.2 on 13 August 2014 19:16:52
+os: Linux-3.2.0-4-686-pae #1 SMP Debian 3.2.65-1+deb7u1
+nodename: alt.cwc.me
+machine: i686
+clock source: unix
+detected number of CPU cores: 1
+current working directory: /var/www/vhosts/10.communitylink.com/tengr
+writing pidfile to /tmp/tengr-master.pid
+detected binary path: /var/www/vhosts/10.communitylink.com/.pyenv/versions/3.4.1/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+your processes number limit is 5968
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to TCP address :8001 fd 3
+Python version: 3.4.1 (default, Aug  5 2014, 18:42:01)  [GCC 4.7.2]
+Set PythonHome to /var/www/.pyenv/versions/3.4.1
+Fatal Python error: Py_Initialize: Unable to get the locale encoding
+ImportError: No module named 'encodings'
+*** Starting uWSGI 2.0.9 (32bit) on [Sat Feb 28 07:36:50 2015] ***
+compiled with version: 4.7.2 on 28 February 2015 07:29:35
+os: Linux-3.2.0-4-686-pae #1 SMP Debian 3.2.65-1+deb7u1
+nodename: alt.cwc.me
+machine: i686
+clock source: unix
+detected number of CPU cores: 1
+current working directory: /var/www/vhosts/10.communitylink.com/tengr
+writing pidfile to /tmp/tengr-master.pid
+detected binary path: /var/www/vhosts/10.communitylink.com/.pyenv/versions/3.4.1/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /var/www/vhosts/10.communitylink.com/tengr
+your processes number limit is 5968
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to TCP address :8001 fd 3
+Python version: 3.4.1 (default, Feb 28 2015, 07:23:26)  [GCC 4.7.2]
+Set PythonHome to /var/www/.pyenv/versions/3.4.1
+Fatal Python error: Py_Initialize: Unable to get the locale encoding
+ImportError: No module named 'encodings'
+*** Starting uWSGI 2.0.6 (32bit) on [Sat Feb 28 07:43:38 2015] ***
+compiled with version: 4.7.2 on 28 February 2015 07:43:10
+os: Linux-3.2.0-4-686-pae #1 SMP Debian 3.2.65-1+deb7u1
+nodename: alt.cwc.me
+machine: i686
+clock source: unix
+detected number of CPU cores: 1
+current working directory: /var/www/vhosts/10.communitylink.com/tengr
+writing pidfile to /tmp/tengr-master.pid
+detected binary path: /var/www/vhosts/10.communitylink.com/.pyenv/versions/3.4.1/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+your processes number limit is 5968
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to TCP address :8001 fd 3
+Python version: 3.4.1 (default, Feb 28 2015, 07:23:26)  [GCC 4.7.2]
+Set PythonHome to /var/www/.pyenv/versions/3.4.1
+Fatal Python error: Py_Initialize: Unable to get the locale encoding
+ImportError: No module named 'encodings'

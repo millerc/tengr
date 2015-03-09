@@ -1,0 +1,51 @@
+{% load humanize %}{% load thumbnail %}
+      <h2>{{ community.name }}, {{ community.get_state_display }}</h2>
+      <div class="large-9 medium-8 small-12 columns">
+        {% if community.publish %}
+        {% if community.video_id %}
+        {% if community.video_id.isdigit %}{% comment %}ID is all digits. Must be Vimeo.{% endcomment %}
+        <div class="flex-video widescreen vimeo">
+          <iframe src="//player.vimeo.com/video/{{ community.video_id }}" width="400" height="225" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+        </div>
+        {% else %}{% comment %}ID is NOT all digits. Must be YouTube.{% endcomment %}
+        <div class="flex-video widescreen">
+          <iframe width="400" height="225" src="//www.youtube.com/embed/{{ community.video_id }}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+        </div>
+        {% endif %}
+        {% else %}
+        {% thumbnail community.reason_set_random.first.image "x500" as im %}
+        <img src="{{ im.url }}" alt="{{ community.name }} Intro Image" />
+        {% endthumbnail %}
+        {% endif %}
+        {% else %}
+        <div class="row">
+          <div class="large-12 columns">
+            <p>We're putting together a list of 10 reasons that make {{ community.name }} great. Do you know one? Let us know!</p>
+          </div>
+        </div>
+        {% include 'tgr/feedback-form.html' %}
+        {% endif %}
+      </div>
+      <div class="large-3 medium-4 small-12 columns">
+        <h3>Vital Signs</h3>
+        <ul>
+          <li><strong><small>Population:</small></strong> {{ community.population|intcomma }} <small>(2010)</small></li>
+          {% if community.median_home_value %}<li><strong><small>Median home value:</small></strong> ${{ community.median_home_value|intcomma }} <small>(Owner occupied housing units, 2011)</small></li>{% endif %}
+          {% if community.median_household_income %}<li><strong><small>Median household income:</small></strong> ${{ community.median_household_income|intcomma }} <small>(2011)</small></li>{% endif %}
+          {% if community.retail_sales %}<li><strong><small>Retail sales:</small></strong> ${{ community.retail_sales|intcomma }} <small>(2007)</small></li>{% endif %}
+        </ul>
+        {% if user.is_staff %}<p><small>{% for a in community.attributes.all %}{{ a }},{% endfor %}</small></p>{% endif %}
+        {% if community.publish %}
+        <h3>What makes this community special?</h3>
+        <a href="{% url 'community' region=community.region.slug slug=community.slug %}" class="button expand">10 Great Reasons</a>
+        {% else %}
+        <h3>Nearby Places</h3>
+        <p><em>Visit these other 10 Great Reasons Communities</em></p>
+        <ul>
+          {% for community in nearby %}
+          <li><a href="{% url 'community' region=community.region.slug slug=community.slug %}">{{ community.name }}, {{ community.state }}</a></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+      <a class="close-reveal-modal">&#215;</a>

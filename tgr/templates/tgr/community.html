@@ -1,0 +1,157 @@
+{% load static %}{% load thumbnail %}<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CommunityLink | 10 Great Reasons - {{ community.name }}, {{ community.get_state_display }}</title>
+    <link rel="stylesheet" href="{% static 'css/foundation.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/community.css' %}" />
+    <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Muli' rel='stylesheet' type='text/css'>
+    <script src="{% static 'js/vendor/jquery.js' %}"></script>
+    <script src="{% static 'js/jquery.widowFix-1.3.2.min.js' %}"></script>
+    <script src="{% static 'js/vendor/modernizr.js' %}"></script>
+    <script src="{% static 'js/jquery.easing.1.3.js' %}"></script>
+    <script src="{% static 'js/jquery.scrollsnap.js' %}"></script>
+    <script src="{% static 'js/jquery.scrollstop.js' %}"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $(document).scrollsnap({
+          snaps: '.snap',
+          proximity: 100,
+          easing: 'easeInOutExpo'
+        });
+      });
+    </script>
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53bd9ee20c997c19"></script>
+  </head>
+  <body>
+    <!-- Mosaic -->
+    <a id="top"></a>
+    <div class="cover">
+    <div class="row mosaic">
+      <div class="large-6 medium-6 small-12 columns"><a href="#" data-reveal-id="overview"><img src="{% static 'img/cover/cover.jpg' %}" alt="Cover"></a></div>
+      {% for reason in community.reason_set_random %}
+      <div class="large-3 medium-3 small-6 columns"><a href="#{{ reason.number }}">{% thumbnail reason.image "536x536" crop="center" as im %}<img src="{{ im.url }}" alt="{{ reason.headline }} Thumbnail">{% endthumbnail %}</a></div>{% cycle '' '' '' '</div><div class="row mosaic">' %}{% endfor %}
+      <div class="large-6 medium-6 small-12 columns"><a href="#" data-reveal-id="overview"><img src="{{ community.title_image.url}}" alt="Cover Title"></a></div>
+    </div>
+    </div><!-- cover -->
+    <!-- 10 Good Reasons -->
+    {% for reason in community.reason_set.all %}
+    <!-- {{ reason.number }} -->
+    <a id="{{ reason.number }}"></a>
+    <div class="section reason{{ reason.number }} snap">
+      <div class="row numbers">
+        <div class="large-7 medium-7 small-12 columns">
+          <div class="dropcap">{{ reason.number }}</div>
+          <h1>{{ reason.headline }}</h1>
+          {{ reason.content|safe }}
+        </div>
+        <div class="large-5 medium-5 small-12 columns">
+          <a href="#" data-reveal-id="photo-{{ reason.number }}">
+            {% thumbnail reason.image "708x708" crop="center" as im %}
+            <img class="reason-photo" src="{{ im.url }}" alt="{{ reason.headline }} Inline">
+            {% endthumbnail %}
+          </a>
+          {% if reason.sponsor %}
+          <a {% if reason.sponsor.modal %}href="#" data-reveal-id="advertiser-{{ reason.number }}"{% else %}href="{{ reason.sponsor.url }}" {% endif %}><img class="ad" src="{{ reason.sponsor.image.url }}" alt="{{ reason.sponsor.name }} Ad"></a>{% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    <div class="footer">
+      <div class="row">
+        <div class="large-4 medium-4 small-12 columns">
+          <img class="logo" src="{% static 'img/logo-community.png' %}" alt="Logo">
+        </div>
+        <div class="large-4 medium-4 small-12 columns">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+          <div class="addthis_sharing_toolbox"></div>
+        </div>
+        <div class="large-4 medium-4 show-for-medium-up columns">
+          <p>&copy; 2014 CommunityLink</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reveal Reason Photo -->
+    {% for reason in community.reason_set.all %}
+    <div id="photo-{{ reason.number }}" class="reveal-modal {% if reason.image.height > reason.image.width %}tiny{% else %}medium{% endif %}" data-reveal>
+      <img class="photo-reveal" src="{{ reason.image.url }}" alt="{{ reason.headline }} Full">
+      <p>{{ reason.caption|safe }}</p>
+      <a class="close-reveal-modal">&#215;</a>
+    </div>
+    {% endfor %}
+    <!-- Reveal Community Overview -->
+    <div id="overview" class="reveal-modal medium" data-reveal>
+      <div class="flex-video widescreen vimeo">
+        {% if community.video_id.isdigit %}{% comment %}ID is all digits. Must be Vimeo.{% endcomment %}
+        <div class="flex-video widescreen vimeo">
+          <iframe src="//player.vimeo.com/video/{{ community.video_id }}" width="400" height="225" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+        </div>
+        {% else %}{% comment %}ID is NOT all digits. Must be YouTube.{% endcomment %}
+        <div class="flex-video widescreen">
+          <iframe width="400" height="225" src="//www.youtube.com/embed/{{ community.video_id }}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+        </div>
+        {% endif %}
+      </div>
+      <a class="close-reveal-modal">&#215;</a>
+    </div>
+
+    {% for reason in community.get_reasons_with_sponsor_modals %}
+    <div id="advertiser-{{ reason.number }}" class="reveal-modal medium" data-reveal>
+      {{ reason.sponsor.modal|safe }}
+      <a class="close-reveal-modal">&#215;</a>
+    </div>
+    {% endfor %}
+
+    <div id="toTop"><a href="#top"><img src="{% static 'img/up-arrow.png' %}" alt="To Top Arrow"></a></div>
+
+    <script src="{% static 'js/foundation.min.js' %}"></script>
+    <script>
+      $(document).foundation();
+    </script>
+    <script>
+      $('a').click(function(){
+        $('html, body').animate({
+          scrollTop: $( $(this).attr('href') ).offset().top
+        }, 1500, 'easeInOutExpo');
+        return false;
+      });
+    </script>
+    <script>
+      $(function () {
+        /* set variables locally for increased performance */
+        var scroll_timer;
+        var displayed = false;
+        var $toTop = $('#toTop a');
+        var $window = $(window);
+        var top = $(document.body).children(0).position().top;
+        /* react to scroll event on window */
+        $window.scroll(function () {
+          window.clearTimeout(scroll_timer);
+          scroll_timer = window.setTimeout(function () {
+            if($window.scrollTop() <= top) {
+              displayed = false;
+              $toTop.fadeOut(500);
+            }
+            else if(displayed == false) {
+              displayed = true;
+              $toTop.stop(true, true).show().click(function () { $toTop.fadeOut(500); });
+            }
+          }, 100);
+        });
+      });
+    </script>
+    <script>
+      $(document).ready(function() {
+        //all heading 1s
+        $('h1,p').widowFix({
+          letterLimit: 12,
+          prevLimit: 12,
+          linkFix: false 
+        })
+      });
+    </script>
+  </body>
+</html>

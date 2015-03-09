@@ -1,0 +1,62 @@
+/* Media */
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+.cover {padding: .4em 0 .7em 0;}
+h1 {-webkit-text-size-adjust:75%;}
+.dropcap {padding: 0.10em 0.06em 0.06em 0; -webkit-text-size-adjust:75%;}
+.logo {padding: 1em 0 0 0;}
+}
+ 
+/* iPads (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) {
+.cover {padding: .4em 0 .7em 0;}
+h1 {-webkit-text-size-adjust:93%;}
+.dropcap {padding: 0.03em 0.06em 0.06em 0; -webkit-text-size-adjust:93%;}
+}
+ 
+/* Desktops and laptops ----------- */
+@media only screen 
+and (min-width : 1224px) {
+.cover {padding: 3em 0 3.3em 0;}
+.dropcap {padding: 0 0.06em 0 0;}
+}
+ 
+/* Large screens ----------- */
+@media only screen 
+and (min-width : 1824px) {
+.cover {padding: 3em 0 3.3em 0;}
+.dropcap {padding: 0 0.06em 0.06em 0;}
+}
+
+
+/* Custom */
+body, html {font-family: 'Muli', sans-serif;}
+h1 {font-family: 'Oswald', sans-serif; text-transform: uppercase; font-size: 2.5em;}
+.dropcap {font-family: 'Oswald', sans-serif; font-size: 11.5em; float: left; line-height: 1em; color: rgba(0,0,0,0.4);}
+a:link, a:visited {color: black;}
+a:active {color: #2583b8;}
+.mosaic img {margin: .7em 0 .4em 0;}
+.section {padding: 3em 0 3em 0;}
+.reason1 {background: rgba(70,116,160,1.0);}
+.reason2 {background: rgba(70,116,160,0.9);}
+.reason3 {background: rgba(70,116,160,0.8);}
+.reason4 {background: rgba(70,116,160,0.7);}
+.reason5 {background: rgba(70,116,160,0.6);}
+.reason6 {background: rgba(70,116,160,0.5);}
+.reason7 {background: rgba(70,116,160,0.4);}
+.reason8 {background: rgba(70,116,160,0.3);}
+.reason9 {background: rgba(70,116,160,0.2);}
+.reason10 {background: rgba(70,116,160,0.1);}
+.reason-photo {margin: 1em 0 1em 0; border: 0.6em solid white;}
+.ad {border: 0.15em solid black;}
+.reveal-modal {text-align: center;}
+.reveal-modal p {margin: 0; padding: 1em 1em 0 1em;}
+.reveal-modal-bg {background: rgba(0, 0, 0, 0.75);}
+.footer {background-color: #4674a0; color: white; padding: 0.01em;}
+.footer p {text-align: right; padding: 33px 0 0 0;}
+.addthis_sharing_toolbox { width: 210px; float: right; padding: 27px 0 0.2em 0;}
+#toTop a {display: block; display: none; z-index: 98; position: fixed; bottom: 1em; right: 1em; width: 50px; height: 50px; opacity: 0.8;}

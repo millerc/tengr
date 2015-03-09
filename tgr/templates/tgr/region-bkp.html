@@ -1,0 +1,318 @@
+{% load static %}{% load humanize %}<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CommunityLink | 10 Great Reasons - {{ region.name }} Region</title>
+
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/foundation.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/region.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/mosaic.css' %}" />
+    <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Muli' rel='stylesheet' type='text/css'>
+    <script src="{% static 'js/vendor/modernizr.js' %}"></script>
+    <script src="{% static 'js/vendor/jquery.js' %}"></script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    <script src="{% static 'js/gmaps.js' %}"></script>
+    <script src="{% static 'js/vendor/mosaic.1.0.1.js' %}"></script>
+    {% comment %}<script src="{% static 'js/magic.js' %}"></script>{% endcomment %}
+    <script src="markers/2/"></script>
+    <script type="text/javascript">
+      var map;
+      var selected_attrs = [];
+      var features = {
+      {% for feature in attrs %}{{ feature.slug }}: "{{ feature.name }}", {% endfor %}
+      };
+      
+      var goldStar = {
+        path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z',
+        fillColor: 'yellow',
+        fillOpacity: 0.8,
+        scale: 1,
+        strokeColor: 'gold',
+        strokeWeight: 1
+      };
+                  
+
+      var markers = [
+      {% for community in region.community_set.all %}
+      { 
+        lat: "{{ community.point.y }}", 
+        lng: "{{ community.point.x }}", 
+        title: "{{ community.name }}", 
+        icon: { 
+          url: "{{ community.marker.url }}", 
+          scaledSize: new google.maps.Size (24, 24) 
+        }, 
+        click: function(e) { $('#community-modal{{ community.publish|yesno:"-with-media," }}').foundation('reveal', 'open', '{% url 'community_modal' region=community.region.slug slug=community.slug %}'); },
+        opacity: 0.67,
+        modal_id: "community-modal{{ community.publish|yesno:'-with-media,' }}",
+        modal_url: "{% url 'community_modal' region=community.region.slug slug=community.slug %}", 
+        population: {{ community.population }}, 
+        attrs: [ {% for attr in community.attributes.all %}"{{ attr.slug }}", {% endfor %} ],
+      },
+      {% endfor %}
+      ];
+
+      $(document).ready(function(){
+      map = new GMaps({
+        div: '#map',
+        lat: {{ region.border.centroid.y }},
+        lng: {{ region.border.centroid.x }},
+        zoom: 8, 
+        zoomControl : true,
+        zoomControlOpt: {
+          style : "SMALL",
+          position: "TOP_LEFT"
+        },
+        panControl : true,
+        streetViewControl : false,
+        mapTypeControl: false,
+        overviewMapControl: false
+      });
+
+      var path = {{ path|safe }} ;
+      
+      polygon = map.drawPolygon({
+        paths: path, // pre-defined polygon shape
+        strokeColor: '#acc0d8',
+        strokeOpacity: .5,
+        strokeWeight: 2,
+        fillColor: '#acc0d8',
+        fillOpacity: .2,
+        clickable: false,
+        useGeoJSON: true
+      });
+      
+      var styles = [ 
+        { "stylers": [ { "hue": "#acc0d8" }, { "weight": 1 } ] }, 
+        {
+          featureType: "road",
+          elementType: "geometry",
+          stylers: [ { lightness: 100 }, { visibility: "on" } ]
+        },
+        {
+          featureType: "road",
+          elementType: "labels",
+          stylers: [ { visibility: "on" } ]
+        }
+      ];
+
+      map.addStyle({
+        styledMapName:"Styled Map",
+        styles: styles,
+        mapTypeId: "map_style"  
+      });
+
+    map.setStyle("map_style");
+      });
+    </script>
+
+  </head>
+  <body>
+
+    <nav class="top-bar" data-topbar>
+    <ul class="title-area">
+      <li class="name">
+        <h1><a href="#">{{ region.name }} Region</a></h1>
+      </li>
+      <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+      <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+    </ul>
+
+    <section class="top-bar-section">
+
+      <!-- Left Nav Section -->
+      <ul class="left">
+        <li class="divider"></li>
+        <li class="has-dropdown">
+          <a href="#">Population</a>
+          <ul class="dropdown">
+            <li data-js="click-population-menu" data-poprange="[1500,3999]" class=""><a href="#">1,500&ndash;4,000</a></li>
+            <li data-js="click-population-menu" data-poprange="[4000,6999]" class=""><a href="#">4,000&ndash;7,000</a></li>
+            <li data-js="click-population-menu" data-poprange="[7000,9999]" class=""><a href="#">7,000&ndash;10,000</a></li>
+            <li data-js="click-population-menu" data-poprange="[10000,30000]" class=""><a href="#">10,000+</a></li>
+            <li data-js="click-population-menu" data-poprange="[0,999999999]" class="active"><a href="#">All</a></li>
+          </ul>
+        </li>
+        <li class="divider"></li>
+        <li class="has-dropdown">
+          <a href="#">Features</a>
+          <ul class="dropdown scroll-list">
+            {% for attr in attrs %}
+            <li><a href="#"><input id="attr{{ forloop.counter }}" name="attributes" value="{{ attr.slug }}" type="checkbox"><label for="attr{{ forloop.counter }}">{{ attr.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="#">Communities</a>
+          <ul id="community-list" class="dropdown scroll-list">
+            {% for community in region.community_set.all %}
+            <li><a href="#" data-js="click-community-menu" data-lat="{{ community.point.y }}" data-lon="{{ community.point.x }}" data-modal-id="community-modal{{ community.publish|yesno:"-with-media," }}" data-modal-url="{% url 'community_modal' region=community.region.slug slug=community.slug %}">{{ community.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+        <li class="divider"></li>
+        {% if user.is_staff %}
+        <li class="has-dropdown">
+          <a href="#">Dev Utils</a>
+          <ul class="dropdown">
+            <li><a href="javascript:map.fitZoom();">Fit Markers</a></li>
+            <li><a href="javascript:map.removeMarkers();">Clear Markers</a></li>
+            <li><a href=".">Reload</a></li>
+          </ul>
+        </li>
+        <li class="divider"></li>
+        {% endif %}
+      </ul>
+    </section>
+  </nav>
+
+    <div id="map" class="toggleMap"></div>
+    <div class="footer">
+      <div class="row">
+        <div class="large-4 medium-4 small-12 columns">
+          <img src="{% static 'img/logo-region.png' %}" alt="Logo">
+        </div>
+        <div class="large-4 medium-4 small-12 columns"></div>
+        <div class="large-4 medium-4 show-for-medium-up columns">
+          <p>&copy; 2014 CommunityLink</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODALS -->
+    {% if messages %}
+    <div id="messages-modal" class="reveal-modal small" data-reveal>
+      {% for message in messages %}
+      <p>{{ message }}</p>
+      {% endfor %}
+      <a class="close-reveal-modal">&#215;</a>
+    </div>
+    {% endif %}
+    <div id="community-modal-with-media" class="reveal-modal" data-reveal></div>
+    <div id="community-modal" class="reveal-modal medium" data-reveal></div>
+    <div id="alert-none-found-modal" class="reveal-modal small" data-reveal><p>No community in this region matched all of these features.</p><a class="close-reveal-modal">&#215;</a></div>
+    <!-- END MODALS -->
+
+    <script src="{% static 'js/foundation.min.js' %}"></script>
+    <script>
+      $(document).foundation();
+    </script>
+    <script>
+      $(document).ready(function(){map.addMarkers(markers);map.fitZoom();});
+      var markers_filtered = markers;
+      var markers_pop = markers;
+      var communities = $('ul#community-list');
+      
+      function containsAll(needles, haystack) {
+        for (var i = 0, len = needles.length; i < len; i++) {
+          if ($.inArray(needles[i], haystack) == -1) return false;
+        }
+        return true;
+      }
+      
+      function filter_markers() {
+        selected_attrs = $("input:checkbox[name=attributes]:checked").map(function () {
+          return $(this).val();
+        }).get();
+        markers_filtered = $.grep(markers_pop, function (m) {
+          return containsAll(selected_attrs, m.attrs);
+        });
+        // if there's at least one marker
+        if (typeof markers_filtered != "undefined" && markers_filtered !== null && markers_filtered.length > 0) {
+          update_community_menu();
+          map.removeMarkers();
+          map.addMarkers(markers_filtered);
+        } else {
+          $('#alert-none-found-modal').foundation('reveal', 'open');
+          $('input:checkbox[name=attributes]').each(function() {
+            this.checked = false;
+          });
+        }
+      }
+      
+      function update_community_menu() {
+        // clear the community menu
+        $('ul#community-list li').slice(1).remove();
+        // populated the community menu
+        $.each(markers_filtered, function () {
+          var li = $('<li/>')
+          .appendTo(communities);
+          var aaa = $('<a/>')
+          .attr('href',"#")
+          .attr('data-js', 'click-community-menu')
+          .attr('data-lon', this.lng)
+          .attr('data-lat', this.lat)
+          .attr('data-modal-id', this.modal_id)
+          .attr('data-modal-url', this.modal_url)
+          .text(this.title)
+          .appendTo(li);
+        });
+      }
+      
+      $('[data-js=click-show-all-markers]').click(function() {
+        map.removeMarkers();
+        map.addMarkers(markers);
+        map.fitZoom();
+      });
+      
+      $('[data-js=click-population-menu]').click(function() {
+        var poprange = $(this).data('poprange');
+        markers_pop = $.grep(markers, function (m) {
+          return m.population >= poprange[0] && m.population <= poprange[1];
+        });
+        filter_markers();
+      });
+      
+      $('input:checkbox[name=attributes]').click(function () {
+        selected_attrs = $("input:checkbox[name=attributes]:checked").map(function () {
+          return $(this).val();
+        }).get();
+        markers_filtered = $.grep(markers_pop, function (m) {
+          return containsAll(selected_attrs, m.attrs);
+        });
+        if (typeof markers_filtered != "undefined" && markers_filtered !== null && markers_filtered.length > 0) {
+          map.removeMarkers();
+          map.addMarkers(markers_filtered);
+        } else {
+          $('#alert-none-found-modal').foundation('reveal', 'open');
+          $(this).attr('checked', false);
+        }
+      });
+      
+      $('[data-js=click-community-menu]').click(function() {
+        map.panTo(new google.maps.LatLng($(this).data('lat'),$(this).data('lon')));
+        map.setZoom(12);
+        $('#'+$(this).data('modal-id')).foundation('reveal', 'open', $(this).data('modal-url'));
+      });
+       
+    </script>
+    <script>
+      $(function () {
+        $('.top-bar-section .dropdown li').click(function () {
+          $('.dropdown li').removeClass('active');
+          $(this).addClass('active');
+        });
+      });
+    </script>
+    <script type="text/javascript">
+      $(window).resize(function(){
+        var height = $(window).height();
+        var width = $(window).width();
+        var nheight = (height - (0.1 * height))+'px';
+        var nwidth = (width - (0.0 * width))+'px';
+        $('#map').css({
+                width: nwidth,
+                height: nheight
+        });
+      }).resize();
+    </script>
+    {% if messages %}
+    <script type="text/javascript">
+      $(document).ready(function(){$('#messages-modal').foundation('reveal', 'open')});
+    </script>
+    {% endif %}
+  </body>
+</html>
